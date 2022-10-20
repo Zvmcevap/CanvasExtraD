@@ -1,9 +1,21 @@
 export class Oglisce {
   constructor(seznamKoordinat) {
-    this.r = 1
+    this.r = 1;
     this.zacetneKoordinate = [...seznamKoordinat];
+    this.oglisceColor =
+      "rgb(" +
+      (240 * (((this.zacetneKoordinate[0] + 1) / 2) +
+        (this.zacetneKoordinate[3] + 1) / 2))/2 +
+      "," +
+      (240 * (((this.zacetneKoordinate[1] + 1) / 2) +
+        (this.zacetneKoordinate[3] + 1) / 2))/2 +
+      "," +
+      (240 * (((this.zacetneKoordinate[2] + 1) / 2) +
+        (this.zacetneKoordinate[3] + 1) / 2))/2 +
+      ")";
+console.log(this.oglisceColor)
     if (this.zacetneKoordinate.length < 4) {
-      this.zacetneKoordinate.push(0)
+      this.zacetneKoordinate.push(0);
     }
     this.zacetneKoordinate.push(1);
     this.risaniVektor = [
@@ -27,17 +39,22 @@ export class Oglisce {
       0,
       2 * Math.PI
     );
-    ctx.fillStyle = "red";
+    ctx.fillStyle = this.oglisceColor;
     ctx.fill();
-
-
   }
 
   narisiKoordinateOglisc(ctx) {
     ctx.fillStyle = "black";
-    ctx.fillText("x: "+ this.risaniVektor[0].toFixed(3) + " y: "+this.risaniVektor[1].toFixed(3) + " z: " + this.risaniVektor[2].toFixed(3),
-        680 + this.risaniVektor[0] * 100,
-        340 + this.risaniVektor[1] * 100);
+    ctx.fillText(
+      "x: " +
+        this.risaniVektor[0].toFixed(3) +
+        " y: " +
+        this.risaniVektor[1].toFixed(3) +
+        " z: " +
+        this.risaniVektor[2].toFixed(3),
+      680 + this.risaniVektor[0] * 100,
+      340 + this.risaniVektor[1] * 100
+    );
   }
 
   // Kvadratki so hitrejši za narisat, sam krogci so lepši

@@ -156,6 +156,7 @@ export class Aplikacija {
     this.perspektivaWCheckbox.addEventListener("change", function () {
       document.app.aliNarisemSPerspektivoW = this.checked;
       document.app.getPerspektivnoMatrikoRGTI();
+      document.app.getPerspektivnoMatrikoRGTIW();
       document.app.posodobiKoordinateOglisc();
     });
     this.fieldZFar = document.getElementById("zFar");
@@ -163,6 +164,7 @@ export class Aplikacija {
     this.fieldZFar.addEventListener("change", function () {
       document.app.zFar = this.valueAsNumber;
       document.app.getPerspektivnoMatrikoRGTI();
+      document.app.getPerspektivnoMatrikoRGTIW();
       document.app.posodobiKoordinateOglisc();
     });
     this.fieldZFar.addEventListener("mouseover", function () {
@@ -994,7 +996,6 @@ export class Aplikacija {
           vektor[0][1] /= vektor[0][4];
           vektor[0][2] /= vektor[0][4];
         }
-        oglisce.r = vektor[0][4];
       }
 
       oglisce.risaniVektor = vektor[0];
