@@ -82,21 +82,42 @@
               step="0.1"
             />
           </div>
+          <div class="radio w-axis">
+            <label for="translate-w">W</label>
+            <input
+              type="number"
+              id="translate-w"
+              name="translate-w"
+              step="0.1"
+            />
+          </div>
         </fieldset>
 
         <fieldset class="control-box">
           <legend>Rotacija</legend>
           <div class="radio x-axis">
-            <label for="rotate-x">X</label>
+            <label for="rotate-x">YZ</label>
             <input type="number" id="rotate-x" name="rotate-x" step="1" />
           </div>
           <div class="radio y-axis">
-            <label for="rotate-y">Y</label>
+            <label for="rotate-y">XZ</label>
             <input type="number" id="rotate-y" name="rotate-y" step="1" />
           </div>
           <div class="radio z-axis">
-            <label for="rotate-z">Z</label>
+            <label for="rotate-z">XY</label>
             <input type="number" id="rotate-z" name="rotate-z" step="1" />
+          </div>
+          <div class="radio xw-axis">
+            <label for="rotate-xw">XW</label>
+            <input type="number" id="rotate-xw" name="rotate-xw" step="1" />
+          </div>
+          <div class="radio yw-axis">
+            <label for="rotate-y">YW</label>
+            <input type="number" id="rotate-yw" name="rotate-yw" step="1" />
+          </div>
+          <div class="radio zw-axis">
+            <label for="rotate-zw">ZW</label>
+            <input type="number" id="rotate-zw" name="rotate-zw" step="1" />
           </div>
         </fieldset>
         <fieldset class="control-box">
@@ -113,54 +134,56 @@
             <label for="scale-z">Z</label>
             <input type="number" id="scale-z" name="scale-z" step="0.1" />
           </div>
+          <div class="radio w-axis">
+            <label for="scale-w">W</label>
+            <input type="number" id="scale-w" name="scale-w" step="0.1" />
+          </div>
         </fieldset>
         <fieldset class="control-box">
-          <legend>         <input type="checkbox" id="perspektiva" name="perspektiva">
-            <label for="perspektiva">Perspektiva</label></legend>
+          <legend>Perspektiva</legend>
           <div class="radio">
-            <label for="fov">FOV</label>
-            <input type="number" id="fov" name="fov" step="1" min="0" max="360"/>
+            <input type="checkbox" id="perspektiva" name="perspektiva" />
+            <label for="perspektiva">Globina Z-os</label>
           </div>
           <div class="radio">
-            <label for="zNear">zNear</label>
-            <input type="number" id="zNear" name="zNear" step="0.1"/>
+            <label for="zNear">z-daleko</label>
+            <input type="number" id="zNear" name="zNear" step="0.1" />
           </div>
           <div class="radio">
-            <label for="zFar">zFar</label>
+            <input type="checkbox" id="perspektivaw" name="perspektivaw" />
+            <label for="perspektivaw">Globina W-os</label>
+          </div>
+          <div class="radio">
+            <label for="zFar">w-daleko</label>
             <input type="number" id="zFar" name="zFar" step="0.1" />
           </div>
         </fieldset>
         <fieldset class="control-box">
           <legend>Nariši</legend>
           <div class="radio">
-            <input
-                    type="checkbox"
-                    id="narisiOglisce"
-                    name="narisiOglisce"
-            />
+            <input type="checkbox" id="narisiOglisce" name="narisiOglisce" />
             <label for="narisiOglisce">Oglišča</label>
           </div>
           <div class="radio">
-            <input
-                    type="checkbox"
-                    id="narisiPovezave"
-                    name="narisiPovezave"
-            />
+            <input type="checkbox" id="narisiPovezave" name="narisiPovezave" />
             <label for="narisiPovezave">Povezave</label>
           </div>
           <div class="radio">
             <input
-                    type="checkbox"
-                    id="narisiKoordinate"
-                    name="narisiKoordinate"
+              type="checkbox"
+              id="narisiKoordinate"
+              name="narisiKoordinate"
             />
             <label for="narisiKoordinate">Koordinate</label>
           </div>
         </fieldset>
         <div class="control-box">
-          <button id="spinx">BABY</button>
-          <button id="spiny">ROUND</button>
-          <button id="spinz">ROUND</button>
+          <button id="spinx" class="x-axis">X++</button>
+          <button id="spiny" class="y-axis">Y++</button>
+          <button id="spinz" class="z-axis">Z++</button>
+          <button id="spinxw" class="w-axis">W++</button>
+          <button id="spinyw" class="yw-axis">YW++</button>
+          <button id="spinzw" class="zw-axis">ZW++</button>
         </div>
       </div>
     </div>

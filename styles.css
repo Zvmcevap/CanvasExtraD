@@ -52,4 +52,23 @@
   color: white;
 }
 
+.w-axis {
+  background-color: purple;
+  color: white;
+}
+
+.xw-axis {
+  background-color: purple;
+  color: white;
+}
+
+.yw-axis {
+  background-color: turquoise;
+  color: white;
+}
+
+.zw-axis {
+  background-color: darkgoldenrod;
+  color: white;
+}
 

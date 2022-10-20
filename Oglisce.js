@@ -1,5 +1,6 @@
 export class Oglisce {
   constructor(seznamKoordinat) {
+    this.r = 1
     this.zacetneKoordinate = [...seznamKoordinat];
     this.zacetneKoordinate.push(1);
     this.risaniVektor = [
@@ -19,7 +20,7 @@ export class Oglisce {
     ctx.arc(
       700 + this.risaniVektor[0] * 100,
       350 + this.risaniVektor[1] * 100,
-      2,
+      5 / this.r,
       0,
       2 * Math.PI
     );

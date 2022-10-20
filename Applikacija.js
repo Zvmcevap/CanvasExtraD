@@ -24,7 +24,7 @@ export class Aplikacija {
     /************************************** **********************************/
     // Text Datoteka (V prvi nalogi je blo rečen da more bit na tipa .obj datoteke narejena... in tko bo)
     /************************************** **********************************/
-    this.imeTextDatoteke = "kvadrat.txt";
+    this.imeTextDatoteke = "teserakt.txt";
     this.prebranaDatoteka = "";
     // Ob zagonu
     const preberi = async (datoteka) => {
@@ -53,10 +53,11 @@ export class Aplikacija {
     // indexi 0, 1, 2 so x, y, z, w
     // Enotska Matrika je kinda big deal, to nariše točke, črte, objekt brez kakršne koli transformacije, pač najbl vanilla, dolgčas 1:1 preslikava možna
     this.enotskaMatrika = [
-      [1, 0, 0, 0],
-      [0, 1, 0, 0],
-      [0, 0, 1, 0],
-      [0, 0, 0, 1],
+      [1, 0, 0, 0, 0],
+      [0, 1, 0, 0, 0],
+      [0, 0, 1, 0, 0],
+      [0, 0, 0, 1, 0],
+      [0, 0, 0, 0, 1],
     ];
 
     // Če hočemo 3+ dimenzije spakirat v 2 dimenzionalni prostor brez perspektive pomnožimo vektor s spodnjo matriko
@@ -64,49 +65,22 @@ export class Aplikacija {
 
     // --Ubistvu-- rabmo za tako imenovani "clipping plane", do kam rišemo oglišča - čez določeno točko jih naj ne bi več... ampak bože, nevem če se mi da to implementirat..
     this.ortografskaMatrika = [
-      [1, 0, 0, 0],
-      [0, 1, 0, 0],
-      [0, 0, 0, 0],
-      [0, 0, 0, 0],
+      [1, 0, 0, 0, 0],
+      [0, 1, 0, 0, 0],
+      [0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0],
     ];
 
     /************************************** **********************************/
     // Perspektiva - Mozak pored kompa, i nezdrava klopa... -
     /************************************** **********************************/
-    // Ta je kr zapletus maximus, ker moramo vzet v upoštev cel kp stari.
 
-    // Stvar #1:
-    // aspect ratio -- višina versus dolžina ali dolžina versus višina (16:9 za monitorje naprimer,
-    // 2:1 (oz. 1:2) za ta canvas k sm ga jst kle narisu).
-
-    this.aspectRatio = 1;
-
-    // Stvar #2:
-    // Field of View (Polje Pogleda??) - to je kot, s katerim večamo polje našega pogleda.. večji kot, bolj širok je
-    // pogled (fish-eye fora), manjši je kot bl je zoom-iran..
-    // Se prav, večji kot, večji je naš pogled in posamezen objekt je manjši.. manjši kot vidimo manj in so objekti večji.
-    // Povezan je z aspect ratiom - če vzamemo višino/dolžino  gledamo fov kot po vertikali -- fovY,
-    // če vzamemo dolžino/višino pa po horizontali -- fovX.... se mi zdi... bom najprej fovY dal da vidm če dela
-
-    this.fov = 45;
-
-    // Stvar #3:
-    // far plane pa near plane -- to določa kok daleč pa kok blizu lahk vidmo (po z-osi kamere ponavad)
-    // vse kar ma večji z od far-ja je predaleč od oči in izgine, vse kar ma z manj on near-ja je preblizu nosa dab vidl..
-    // (emm sidenote, obrni "večji" in "manjši", odvisno od tega a je levi ali desni koordinatni sistem)
-
+    // NE DA SE MI VSEGA PREIMENOVATI - TO BO ODDALJENOST NAŠEGA OČESA OD PLATNA PO Z in W oseh
     this.zNear = 3;
-    this.zFar = 10;
-
-    this.perspektivnaMatrika = [
-      ["Naumo se kle matral s tem, glej funkcijo k jo ustvar"],
-    ];
-    //          .-----------------------To funkcijo-------------------------------'
-    //          v
-    this.getPerspektivnoMatriko();
+    this.zFar = 3;
 
     /************************************** **********************************/
-    // Perspektiva - Kokr jo naredijo na RGTI predmetu... TA MI JE FUL BL VŠEČ... AMPAK FOV NIČE NE DELA!!!
+    // Perspektiva - Kokr jo naredijo na RGTI predmetu...
     /************************************** **********************************/
 
     // Testiram kle kera bolj dela, oziroma kera je bol samoumevna... (spoiler alert: nobena ni samoumevna.)
@@ -114,17 +88,20 @@ export class Aplikacija {
     // Potrebujemo razdaljo od kamere do projekcijske ravnine - npr. naš uč je kamera, html canvas v browserju je projekcijska daljina
     // Da ne delam 1000 kontrol v htmlju bo naš this.zNear služil kot this.d
 
-    this.perspektivnaMatrikaRGTI = [["Kle se tud ne bomo borile s tem"]];
+    this.perspektivnaMatrikaRGTI = [["Kle se ne bomo borile s tem"]];
     this.getPerspektivnoMatrikoRGTI(); // Kle se bomo :)
+
+    this.perspektivnaMatrikaRGTIW = [["Kle se tud ne bomo borile s tem"]];
+    this.getPerspektivnoMatrikoRGTIW(); // jep
 
     // Transformacijska Matrika začne svojo avanturo kot enotska matrika,
     // ki jo potem popačimo (pomnožimo) s skalarno, rotacijsko in nenazadnje (ampak ubistvu nujno nazadnje) s premično matriko
     this.transformacijskaMatrika = [...this.enotskaMatrika];
-
-    // Različni seznami s katerimi bomo ustvarjal transformacijsko matriko
-    this.skalarSeznam = [1, 1, 1, 1];
-    this.rotacijaSeznam = [0, 0, 0, 0];
-    this.premikSeznam = [0, 0, 3, 1];
+    this.transformacijskaMatrika4D =
+      // Različni seznami s katerimi bomo ustvarjal transformacijsko matriko
+      this.skalarSeznam = [1, 1, 1, 1, 1];
+    this.rotacijaSeznam = [0, 0, 0, 0, 0, 0];
+    this.premikSeznam = [0, 0, 3, 3, 1];
 
     /************************************** **********************************/
     // Kontrole, različni inputi etc etc
@@ -158,41 +135,34 @@ export class Aplikacija {
     this.perspektivaCheckbox.checked = false;
     this.perspektivaCheckbox.addEventListener("change", function () {
       document.app.aliNarisemSPerspektivo = this.checked;
-      document.app.getPerspektivnoMatriko();
-      document.app.getPerspektivnoMatrikoRGTI()
+      document.app.getPerspektivnoMatrikoRGTI();
       document.app.posodobiKoordinateOglisc();
-    });
-
-    // FOV kot v stopinjah po x koordinati (okol 85 stopinj imajo igrice +-20 stopinj)
-    this.fieldFov = document.getElementById("fov");
-    this.fieldFov.value = this.fov;
-    this.fieldFov.addEventListener("change", function () {
-      document.app.fov = this.valueAsNumber;
-      document.app.getPerspektivnoMatriko();
-      document.app.getPerspektivnoMatrikoRGTI()
-      document.app.posodobiKoordinateOglisc();
-    });
-    this.fieldFov.addEventListener("mouseover", function () {
-      this.focus();
     });
 
     this.fieldZNear = document.getElementById("zNear");
     this.fieldZNear.value = this.zNear;
     this.fieldZNear.addEventListener("change", function () {
       document.app.zNear = this.valueAsNumber;
-      document.app.getPerspektivnoMatriko();
-      document.app.getPerspektivnoMatrikoRGTI()
+      document.app.getPerspektivnoMatrikoRGTI();
       document.app.posodobiKoordinateOglisc();
     });
     this.fieldZNear.addEventListener("mouseover", function () {
       this.focus();
     });
 
+    this.aliNarisemSPerspektivoW = false;
+    this.perspektivaWCheckbox = document.getElementById("perspektivaw");
+    this.perspektivaWCheckbox.checked = false;
+    this.perspektivaWCheckbox.addEventListener("change", function () {
+      document.app.aliNarisemSPerspektivoW = this.checked;
+      document.app.getPerspektivnoMatrikoRGTI();
+      document.app.posodobiKoordinateOglisc();
+    });
     this.fieldZFar = document.getElementById("zFar");
     this.fieldZFar.value = this.zFar;
     this.fieldZFar.addEventListener("change", function () {
       document.app.zFar = this.valueAsNumber;
-      document.app.getPerspektivnoMatriko();
+      document.app.getPerspektivnoMatrikoRGTI();
       document.app.posodobiKoordinateOglisc();
     });
     this.fieldZFar.addEventListener("mouseover", function () {
@@ -246,8 +216,24 @@ export class Aplikacija {
     this.buttonSpinZ = document.getElementById("spinz");
     this.buttonSpinZ.app = this;
     this.buttonSpinZ.addEventListener("click", this.spinZToggle);
+    // 4D specific
+    this.spinXWYeah = false;
+    this.buttonSpinXW = document.getElementById("spinxw");
+    this.buttonSpinXW.app = this;
+    this.buttonSpinXW.addEventListener("click", this.spinXWToggle);
+
+    this.spinYWYeah = false;
+    this.buttonSpinYW = document.getElementById("spinyw");
+    this.buttonSpinYW.app = this;
+    this.buttonSpinYW.addEventListener("click", this.spinYWToggle);
+
+    this.spinZWYeah = false;
+    this.buttonSpinZW = document.getElementById("spinzw");
+    this.buttonSpinZW.app = this;
+    this.buttonSpinZW.addEventListener("click", this.spinZWToggle);
 
     // Številčna Polja
+    // ******************       Scale          ***************/
     this.fieldScaleX = document.getElementById("scale-x");
     this.fieldScaleX.valueAsNumber = this.skalarSeznam[0];
     this.fieldScaleX.addEventListener("mouseover", function () {
@@ -271,6 +257,19 @@ export class Aplikacija {
     });
     this.fieldScaleZ.app = this;
     this.fieldScaleZ.addEventListener("change", this.numberFieldOnChange);
+
+    // 4D Specific **********************************/
+
+    this.fieldScaleW = document.getElementById("scale-w");
+    this.fieldScaleW.valueAsNumber = this.skalarSeznam[3];
+    this.fieldScaleW.addEventListener("mouseover", function () {
+      this.focus();
+    });
+    this.fieldScaleW.app = this;
+    this.fieldScaleW.addEventListener("change", this.numberFieldOnChange);
+
+    /******************************************* ********/
+    /*************           ROTATE              ***************/
 
     this.fieldRotateX = document.getElementById("rotate-x");
     this.fieldRotateX.valueAsNumber = this.rotacijaSeznam[0];
@@ -296,6 +295,32 @@ export class Aplikacija {
     this.fieldRotateZ.app = this;
     this.fieldRotateZ.addEventListener("change", this.numberFieldOnChange);
 
+    // 4D Specific **********************************/
+    this.fieldRotateXW = document.getElementById("rotate-xw");
+    this.fieldRotateXW.valueAsNumber = this.rotacijaSeznam[3];
+    this.fieldRotateXW.addEventListener("mouseover", function () {
+      this.focus();
+    });
+    this.fieldRotateXW.app = this;
+    this.fieldRotateXW.addEventListener("change", this.numberFieldOnChange);
+
+    this.fieldRotateYW = document.getElementById("rotate-yw");
+    this.fieldRotateYW.valueAsNumber = this.rotacijaSeznam[4];
+    this.fieldRotateYW.addEventListener("mouseover", function () {
+      this.focus();
+    });
+    this.fieldRotateYW.app = this;
+    this.fieldRotateYW.addEventListener("change", this.numberFieldOnChange);
+
+    this.fieldRotateZW = document.getElementById("rotate-zw");
+    this.fieldRotateZW.valueAsNumber = this.rotacijaSeznam[5];
+    this.fieldRotateZW.addEventListener("mouseover", function () {
+      this.focus();
+    });
+    this.fieldRotateZW.app = this;
+    this.fieldRotateZW.addEventListener("change", this.numberFieldOnChange);
+
+    /*************           TRANSLATE              ***************/
     this.fieldTranslateX = document.getElementById("translate-x");
     this.fieldTranslateX.valueAsNumber = this.premikSeznam[0];
     this.fieldTranslateX.addEventListener("mouseover", function () {
@@ -319,6 +344,15 @@ export class Aplikacija {
     });
     this.fieldTranslateZ.app = this;
     this.fieldTranslateZ.addEventListener("change", this.numberFieldOnChange);
+
+    // 4D Specific **********************************/
+    this.fieldTranslateW = document.getElementById("translate-w");
+    this.fieldTranslateW.valueAsNumber = this.premikSeznam[3];
+    this.fieldTranslateW.addEventListener("mouseover", function () {
+      this.focus();
+    });
+    this.fieldTranslateW.app = this;
+    this.fieldTranslateW.addEventListener("change", this.numberFieldOnChange);
 
     // Radio Batn
     this.tranformationType = "scale";
@@ -357,6 +391,15 @@ export class Aplikacija {
   spinZToggle() {
     this.app.spinZYeah = !this.app.spinZYeah;
   }
+  spinXWToggle() {
+    this.app.spinXWYeah = !this.app.spinXWYeah;
+  }
+  spinYWToggle() {
+    this.app.spinYWYeah = !this.app.spinYWYeah;
+  }
+  spinZWToggle() {
+    this.app.spinZWYeah = !this.app.spinZWYeah;
+  }
 
   // Polja s številkami posodobijo sezname transformacij (indeksi 0, 1, 2, 3 so x, y, z, w (w zaenkrat skos 1))
   numberFieldOnChange() {
@@ -364,19 +407,23 @@ export class Aplikacija {
       this.app.fieldTranslateX.valueAsNumber,
       -this.app.fieldTranslateY.valueAsNumber,
       this.app.fieldTranslateZ.valueAsNumber,
+      this.app.fieldTranslateW.valueAsNumber,
       1,
     ];
     this.app.skalarSeznam = [
       this.app.fieldScaleX.valueAsNumber,
       this.app.fieldScaleY.valueAsNumber,
       this.app.fieldScaleZ.valueAsNumber,
+      this.app.fieldScaleW.valueAsNumber,
       1,
     ];
     this.app.rotacijaSeznam = [
       (this.app.fieldRotateX.valueAsNumber * Math.PI) / 180,
       (this.app.fieldRotateY.valueAsNumber * Math.PI) / 180,
       (this.app.fieldRotateZ.valueAsNumber * Math.PI) / 180,
-      1,
+      (this.app.fieldRotateXW.valueAsNumber * Math.PI) / 180,
+      (this.app.fieldRotateYW.valueAsNumber * Math.PI) / 180,
+      (this.app.fieldRotateZW.valueAsNumber * Math.PI) / 180,
     ];
     this.app.getTransformacijskaMatrika();
   }
@@ -500,6 +547,50 @@ export class Aplikacija {
     this.numberFieldOnChange();
   }
 
+  /************        4D SPECIFIC */
+  incrementWPlus() {
+    switch (this.tranformationType) {
+      case "rotation":
+        this.fieldRotateXW.valueAsNumber += 2;
+        break;
+      case "scale":
+        this.fieldScaleW.valueAsNumber += 0.1;
+        break;
+      case "translation":
+        this.fieldTranslateW.valueAsNumber += 0.1;
+        break;
+    }
+    this.numberFieldOnChange();
+  }
+  incrementWYPlus() {
+    switch (this.tranformationType) {
+      case "rotation":
+        this.fieldRotateYW.valueAsNumber += 2;
+        break;
+      case "scale":
+        this.fieldScaleW.valueAsNumber += 0.1;
+        break;
+      case "translation":
+        this.fieldTranslateW.valueAsNumber += 0.1;
+        break;
+    }
+    this.numberFieldOnChange();
+  }
+  incrementWZPlus() {
+    switch (this.tranformationType) {
+      case "rotation":
+        this.fieldRotateZW.valueAsNumber += 2;
+        break;
+      case "scale":
+        this.fieldScaleW.valueAsNumber += 0.1;
+        break;
+      case "translation":
+        this.fieldTranslateW.valueAsNumber += 0.1;
+        break;
+    }
+    this.numberFieldOnChange();
+  }
+
   /************************************** **********************************/
   // Pridobivanje Oglišč
   /************************************** **********************************/
@@ -573,9 +664,10 @@ export class Aplikacija {
 
   getTranslacijskaMatrika() {
     let translacijskaMatrika = [
-      [1, 0, 0, 0],
-      [0, 1, 0, 0],
-      [0, 0, 1, 0],
+      [1, 0, 0, 0, 0],
+      [0, 1, 0, 0, 0],
+      [0, 0, 1, 0, 0],
+      [0, 0, 0, 1, 0],
       this.premikSeznam,
     ];
     return translacijskaMatrika;
@@ -586,10 +678,11 @@ export class Aplikacija {
 
   getSkalarnaMatrika() {
     let skalarnaMatrika = [
-      [this.skalarSeznam[0], 0, 0, 0],
-      [0, this.skalarSeznam[1], 0, 0],
-      [0, 0, this.skalarSeznam[2], 0],
-      [0, 0, 0, 1],
+      [this.skalarSeznam[0], 0, 0, 0, 0],
+      [0, this.skalarSeznam[1], 0, 0, 0],
+      [0, 0, this.skalarSeznam[2], 0, 0],
+      [0, 0, 0, this.skalarSeznam[3], 0],
+      [0, 0, 0, 0, 1],
     ];
     return skalarnaMatrika;
   }
@@ -614,11 +707,12 @@ export class Aplikacija {
 
   getRotacijskaMatrikaYZ() {
     let rotMatrikaYZ = [
-      [1, 0, 0, 0],
+      [1, 0, 0, 0, 0],
       [
         0,
         Math.cos(this.rotacijaSeznam[0]),
         Math.sin(this.rotacijaSeznam[0]),
+        0,
         0,
       ],
       [
@@ -626,8 +720,10 @@ export class Aplikacija {
         -Math.sin(this.rotacijaSeznam[0]),
         Math.cos(this.rotacijaSeznam[0]),
         0,
+        0,
       ],
-      [0, 0, 0, 1],
+      [0, 0, 0, 1, 0],
+      [0, 0, 0, 0, 1],
     ];
     return rotMatrikaYZ;
   }
@@ -638,15 +734,18 @@ export class Aplikacija {
         0,
         -Math.sin(this.rotacijaSeznam[1]),
         0,
+        0,
       ],
-      [0, 1, 0, 0],
+      [0, 1, 0, 0, 0],
       [
         Math.sin(this.rotacijaSeznam[1]),
         0,
         Math.cos(this.rotacijaSeznam[1]),
         0,
+        0,
       ],
-      [0, 0, 0, 1],
+      [0, 0, 0, 1, 0],
+      [0, 0, 0, 0, 1],
     ];
     return rotMatrikaXZ;
   }
@@ -657,17 +756,88 @@ export class Aplikacija {
         -Math.sin(this.rotacijaSeznam[2]),
         0,
         0,
+        0,
       ],
       [
         Math.sin(this.rotacijaSeznam[2]),
         Math.cos(this.rotacijaSeznam[2]),
         0,
         0,
+        0,
       ],
-      [0, 0, 1, 0],
-      [0, 0, 0, 1],
+      [0, 0, 1, 0, 0],
+      [0, 0, 0, 1, 0],
+      [0, 0, 0, 0, 1],
     ];
     return rotMatrikaXY;
+  }
+  // 4D Specific **********************************/
+
+  getRotacijskaMatrikaXW() {
+    let rotMatrikaXW = [
+      [
+        Math.cos(this.rotacijaSeznam[3]),
+        0,
+        0,
+        -Math.sin(this.rotacijaSeznam[3]),
+        0,
+      ],
+      [0, 1, 0, 0, 0],
+      [0, 0, 1, 0, 0],
+      [
+        Math.sin(this.rotacijaSeznam[3]),
+        0,
+        0,
+        Math.cos(this.rotacijaSeznam[3]),
+        0,
+      ],
+      [0, 0, 0, 0, 1],
+    ];
+    return rotMatrikaXW;
+  }
+  getRotacijskaMatrikaYW() {
+    let rotMatrikaYW = [
+      [1, 0, 0, 0, 0],
+      [
+        0,
+        Math.cos(this.rotacijaSeznam[4]),
+        0,
+        -Math.sin(this.rotacijaSeznam[4]),
+        0,
+      ],
+      [0, 0, 1, 0, 0],
+      [
+        0,
+        Math.sin(this.rotacijaSeznam[4]),
+        0,
+        Math.cos(this.rotacijaSeznam[4]),
+        0,
+      ],
+      [0, 0, 0, 0, 1],
+    ];
+    return rotMatrikaYW;
+  }
+  getRotacijskaMatrikaZW() {
+    let rotMatrikaZW = [
+      [1, 0, 0, 0, 0],
+      [0, 1, 0, 0, 0],
+      [
+        0,
+        0,
+        Math.cos(this.rotacijaSeznam[5]),
+        -Math.sin(this.rotacijaSeznam[5]),
+        0,
+      ],
+      [
+        0,
+        0,
+        Math.sin(this.rotacijaSeznam[5]),
+        Math.cos(this.rotacijaSeznam[5]),
+        0,
+      ],
+      [0, 0, 0, 0, 1],
+    ];
+    return rotMatrikaZW;
   }
 
   // Na srečo matrike zgubijo samo komu- komuta- komutitativnost(???), obdržijo pa aso-ermm
@@ -680,33 +850,13 @@ export class Aplikacija {
       this.getRotacijskaMatrikaYZ()
     );
     rm = this.zmnoziMatrike(this.getRotacijskaMatrikaXY(), rm);
-    return rm;
-  }
 
-  // Kle bo sam testna rotacijska matrika, ker me ferbc matra kaj se zgodi če nobene osi ne držimo pr miru
-  getRotacijskaMatrikaXYZLOL() {
-    let rotMatrikaXYZ = [
-      [
-        Math.cos(this.rotacijaSeznam[0]),
-        Math.sin(this.rotacijaSeznam[0]),
-        Math.sin(this.rotacijaSeznam[0]),
-        0,
-      ],
-      [
-        -Math.sin(this.rotacijaSeznam[0]),
-        Math.cos(this.rotacijaSeznam[0]),
-        Math.sin(this.rotacijaSeznam[0]),
-        0,
-      ],
-      [
-        -Math.sin(this.rotacijaSeznam[0]),
-        -Math.sin(this.rotacijaSeznam[0]),
-        Math.cos(this.rotacijaSeznam[0]),
-        0,
-      ],
-      [0, 0, 0, 1],
-    ];
-    return rotMatrikaXYZ;
+    // 4D SPECIFIC
+    rm = this.zmnoziMatrike(this.getRotacijskaMatrikaXW(), rm);
+    rm = this.zmnoziMatrike(this.getRotacijskaMatrikaYW(), rm);
+    rm = this.zmnoziMatrike(this.getRotacijskaMatrikaZW(), rm);
+
+    return rm;
   }
 
   // Transformacijska matrika je nš bread n butter, vso kompliciranje do zdej je blo samo za to da lahko enotsko matriko spremenimo v transformacijsko
@@ -746,48 +896,27 @@ export class Aplikacija {
 
   /************************************** **********************************/
   // Nadaljevanje Perspektivne Matrike
-  /************************************** **********************************/
-
-  getPerspektivnoMatriko() {
-    // Na voljo imamo aspect ratio, fov, zNear in zFar clipping plane, zdej pa:
-
-    // Vzamemo inverz tangens polovice kota fov -- zato ker emm pravokotni trikotnik... trigonometrija.. pitajgoro...
-    let f = 1 / Math.tan((this.fov * Math.PI) / 360);
-
-    // zNear pa zFar mal množimo, mal odštevamo, mal čirule čarule med sabo (ta je res zapletena matrika, kaj naj ti jst XD)
-    let lambdaSimbol = this.zFar / (this.zFar - this.zNear);
-
-    this.perspektivnaMatrika = [
-      [f * this.aspectRatio, 0, 0, 0],
-      [0, f, 0, 0],
-      [0, 0, lambdaSimbol, 1],
-      [0, 0, lambdaSimbol * (-this.zNear), 0],
-    ];
-
-    /* Okej zgornja celotna neokrajšana matrika naj bi bla:
-
-    [(višina/dolžina)*(1/tan(fov/2)),              0,                   0,                          0]
-    [                              0, (1/tan(fov/2)),                   0,                          0]
-    [                              0,              0, (zFar/(zFar-ZNear)), (-zFar*zNear/(zFar-zNear))]
-    [                              0,              0,                   1,                          0]  // Lol, I like this last row the most..
-
-    (če je to bl human readable haha. Ha.. Ha... )
-    k to množimo z  vektorjem [x1, y1, z1, 1] v w column shranimo z, in potem x y z delimo z w spet da dobimo vektor oblike [x2/z1, y2/z1, z2/z1, 1]
-    kjer sta z1 - originalni z, in z2 - spremenjeni s perspektivo z...zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz
-    */
-  }
-
-  /********************************* ***************************************/
   // Perspektiva the RGTI way
   /********************************* **************************************/
   getPerspektivnoMatrikoRGTI() {
     this.perspektivnaMatrikaRGTI = [
-      [1, 0, 0, 0],
-      [0, 1, 0, 0],
-      [0, 0, 1,( 1 / this.zNear)],
-      [0, 0, 0, 0]
+      [1, 0, 0, 0, 0],
+      [0, 1, 0, 0, 0],
+      [0, 0, 1, 0, 1 / this.zNear],
+      [0, 0, 0, 1, 0],
+      [0, 0, 0, 0, 0],
     ];
   }
+  getPerspektivnoMatrikoRGTIW() {
+    this.perspektivnaMatrikaRGTIW = [
+      [1, 0, 0, 0, 0],
+      [0, 1, 0, 0, 0],
+      [0, 0, 1, 0, 0],
+      [0, 0, 0, 1, 1/this.zFar],
+      [0, 0, 0, 0, 0],
+    ];
+  }
+
 
   /************************************** **********************************/
   // Funkcije za risanje po platnu
@@ -851,11 +980,21 @@ export class Aplikacija {
       // Dodaj Perspektivo PLACDRŽAČ
       if (this.aliNarisemSPerspektivo) {
         vektor = this.zmnoziMatrike(this.perspektivnaMatrikaRGTI, vektor);
-        if (vektor[0][3] !== 0) {
-          vektor[0][0] /= vektor[0][3];
-          vektor[0][1] /= vektor[0][3];
-          vektor[0][2] /= vektor[0][3];
+        if (vektor[0][4] !== 0) {
+          vektor[0][0] /= vektor[0][4];
+          vektor[0][1] /= vektor[0][4];
+          vektor[0][2] /= vektor[0][4];
         }
+        oglisce.r = vektor[0][4];
+      }
+      if (this.aliNarisemSPerspektivoW) {
+        vektor = this.zmnoziMatrike(this.perspektivnaMatrikaRGTIW, vektor);
+        if (vektor[0][4] !== 0) {
+          vektor[0][0] /= vektor[0][4];
+          vektor[0][1] /= vektor[0][4];
+          vektor[0][2] /= vektor[0][4];
+        }
+        oglisce.r = vektor[0][4];
       }
 
       oglisce.risaniVektor = vektor[0];
@@ -878,6 +1017,15 @@ export class Aplikacija {
     }
     if (app.spinZYeah) {
       app.incrementZPlus();
+    }
+    if (app.spinXWYeah) {
+      app.incrementWPlus();
+    }
+    if (app.spinYWYeah) {
+      app.incrementWYPlus();
+    }
+    if (app.spinZWYeah) {
+      app.incrementWZPlus();
     }
 
     // Risanje
