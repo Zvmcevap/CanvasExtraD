@@ -2,6 +2,9 @@ export class Oglisce {
   constructor(seznamKoordinat) {
     this.r = 1
     this.zacetneKoordinate = [...seznamKoordinat];
+    if (this.zacetneKoordinate.length < 4) {
+      this.zacetneKoordinate.push(0)
+    }
     this.zacetneKoordinate.push(1);
     this.risaniVektor = [
       this.zacetneKoordinate[0],
