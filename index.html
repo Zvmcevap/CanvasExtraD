@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="./styles.css" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div class="mainDiv">
+      <h1>Cry Engine</h1>
+      <canvas id="myCanvas"></canvas>
+      <div class="control-box">
+        <input type="file" name="inputFile" id="inputFile" />
+      </div>
+      <div class="controls">
+        <div class="control-buttons">
+          <button class="control-button z-axis" id="q">Q</button>
+          <button class="control-button y-axis" id="w">W</button>
+          <button class="control-button z-axis" id="e">E</button>
+          <button class="control-button x-axis" id="a">A</button>
+          <button class="control-button y-axis" id="s">S</button>
+          <button class="control-button x-axis" id="d">D</button>
+        </div>
+        <div class="control-box">
+          <div class="radio">
+            <input
+              type="radio"
+              id="translation"
+              name="transformation-type"
+              value="translation"
+              checked
+            />
+            <label for="translation">Premik</label>
+          </div>
+          <div class="radio">
+            <input
+              type="radio"
+              id="rotation"
+              name="transformation-type"
+              value="rotation"
+            />
+            <label for="rotation">Rotacija</label>
+          </div>
+          <div class="radio">
+            <input
+              type="radio"
+              id="scale"
+              name="transformation-type"
+              value="scale"
+            />
+            <label for="scale">Povečava</label>
+          </div>
+        </div>
+        <fieldset class="control-box">
+          <legend>Premik</legend>
+          <div class="radio x-axis">
+            <label for="translate-x">X</label>
+            <input
+              type="number"
+              id="translate-x"
+              name="translate-x"
+              step="0.1"
+            />
+          </div>
+          <div class="radio y-axis">
+            <label for="translate-y">Y</label>
+            <input
+              type="number"
+              id="translate-y"
+              name="translate-y"
+              step="0.1"
+            />
+          </div>
+          <div class="radio z-axis">
+            <label for="translate-z">Z</label>
+            <input
+              type="number"
+              id="translate-z"
+              name="translate-z"
+              step="0.1"
+            />
+          </div>
+        </fieldset>
+
+        <fieldset class="control-box">
+          <legend>Rotacija</legend>
+          <div class="radio x-axis">
+            <label for="rotate-x">X</label>
+            <input type="number" id="rotate-x" name="rotate-x" step="1" />
+          </div>
+          <div class="radio y-axis">
+            <label for="rotate-y">Y</label>
+            <input type="number" id="rotate-y" name="rotate-y" step="1" />
+          </div>
+          <div class="radio z-axis">
+            <label for="rotate-z">Z</label>
+            <input type="number" id="rotate-z" name="rotate-z" step="1" />
+          </div>
+        </fieldset>
+        <fieldset class="control-box">
+          <legend>Povečava</legend>
+          <div class="radio x-axis">
+            <label for="scale-x">X</label>
+            <input type="number" id="scale-x" name="scale-x" step="0.1" />
+          </div>
+          <div class="radio y-axis">
+            <label for="scale-y">Y</label>
+            <input type="number" id="scale-y" name="scale-y" step="0.1" />
+          </div>
+          <div class="radio z-axis">
+            <label for="scale-z">Z</label>
+            <input type="number" id="scale-z" name="scale-z" step="0.1" />
+          </div>
+        </fieldset>
+        <fieldset class="control-box">
+          <legend>         <input type="checkbox" id="perspektiva" name="perspektiva">
+            <label for="perspektiva">Perspektiva</label></legend>
+          <div class="radio">
+            <label for="fov">FOV</label>
+            <input type="number" id="fov" name="fov" step="1" min="0" max="360"/>
+          </div>
+          <div class="radio">
+            <label for="zNear">zNear</label>
+            <input type="number" id="zNear" name="zNear" step="0.1"/>
+          </div>
+          <div class="radio">
+            <label for="zFar">zFar</label>
+            <input type="number" id="zFar" name="zFar" step="0.1" />
+          </div>
+        </fieldset>
+        <fieldset class="control-box">
+          <legend>Nariši</legend>
+          <div class="radio">
+            <input
+                    type="checkbox"
+                    id="narisiOglisce"
+                    name="narisiOglisce"
+            />
+            <label for="narisiOglisce">Oglišča</label>
+          </div>
+          <div class="radio">
+            <input
+                    type="checkbox"
+                    id="narisiPovezave"
+                    name="narisiPovezave"
+            />
+            <label for="narisiPovezave">Povezave</label>
+          </div>
+          <div class="radio">
+            <input
+                    type="checkbox"
+                    id="narisiKoordinate"
+                    name="narisiKoordinate"
+            />
+            <label for="narisiKoordinate">Koordinate</label>
+          </div>
+        </fieldset>
+        <div class="control-box">
+          <button id="spinx">BABY</button>
+          <button id="spiny">ROUND</button>
+          <button id="spinz">ROUND</button>
+        </div>
+      </div>
+    </div>
+  </body>
+  <script src="scripts.js" type="module"></script>
+  <script src="Oglisce.js" type="module"></script>
+</html>
