@@ -60,17 +60,6 @@ export class Aplikacija {
       [0, 0, 0, 0, 1],
     ];
 
-    // Če hočemo 3+ dimenzije spakirat v 2 dimenzionalni prostor brez perspektive pomnožimo vektor s spodnjo matriko
-    // Ubistvu ne rabmo, lahk sam vzamemo x in y vektorja in je isti k.... perspektivna projekcija bo večji zaplet.
-
-    // --Ubistvu-- rabmo za tako imenovani "clipping plane", do kam rišemo oglišča - čez določeno točko jih naj ne bi več... ampak bože, nevem če se mi da to implementirat..
-    this.ortografskaMatrika = [
-      [1, 0, 0, 0, 0],
-      [0, 1, 0, 0, 0],
-      [0, 0, 0, 0, 0],
-      [0, 0, 0, 0, 0],
-    ];
-
     /************************************** **********************************/
     // Perspektiva - Mozak pored kompa, i nezdrava klopa... -
     /************************************** **********************************/
@@ -97,10 +86,10 @@ export class Aplikacija {
     // Transformacijska Matrika začne svojo avanturo kot enotska matrika,
     // ki jo potem popačimo (pomnožimo) s skalarno, rotacijsko in nenazadnje (ampak ubistvu nujno nazadnje) s premično matriko
     this.transformacijskaMatrika = [...this.enotskaMatrika];
-    this.transformacijskaMatrika4D =
-      // Različni seznami s katerimi bomo ustvarjal transformacijsko matriko
-      this.skalarSeznam = [1, 1, 1, 1, 1];
+    // Različni seznami s katerimi bomo ustvarjal transformacijsko matriko
+    this.skalarSeznam = [1, 1, 1, 1, 1];
     this.rotacijaSeznam = [0, 0, 0, 0, 0, 0];
+    // z in w imata vredonst 3 - ker sta za 3 oddaljena od pogleda
     this.premikSeznam = [0, 0, 3, 3, 1];
 
     /************************************** **********************************/
@@ -210,7 +199,7 @@ export class Aplikacija {
     this.buttonE.app = this;
     this.buttonE.addEventListener("click", this.wasdButtonClick);
 
-    // Baby, round, round...
+    // Avtomatsko vrtenje po vseh 6ih ravninah
     this.spinXYeah = false;
     this.buttonSpinX = document.getElementById("spinx");
     this.buttonSpinX.app = this;
@@ -410,7 +399,7 @@ export class Aplikacija {
     this.app.spinZWYeah = !this.app.spinZWYeah;
   }
 
-  // Polja s številkami posodobijo sezname transformacij (indeksi 0, 1, 2, 3 so x, y, z, w (w zaenkrat skos 1))
+  // Polja s številkami posodobijo sezname transformacij (indeksi 0, 1, 2, 3 so x, y, z, w)
   numberFieldOnChange() {
     this.app.premikSeznam = [
       this.app.fieldTranslateX.valueAsNumber,
@@ -427,6 +416,7 @@ export class Aplikacija {
       1,
     ];
     this.app.rotacijaSeznam = [
+      // Pretvarjamo stopinje v radiane
       (this.app.fieldRotateX.valueAsNumber * Math.PI) / 180,
       (this.app.fieldRotateY.valueAsNumber * Math.PI) / 180,
       (this.app.fieldRotateZ.valueAsNumber * Math.PI) / 180,
@@ -469,6 +459,7 @@ export class Aplikacija {
     }
   }
 
+  /************        Funkcije za višanje/manjšanje vrednosti transformacij  *****************/
   incrementXPlus() {
     switch (this.tranformationType) {
       case "rotation":
@@ -699,7 +690,7 @@ export class Aplikacija {
   // OBRAT - ROTACIJA
   // Ta je zabavno zapletena - zarad trigonometričnih razlogov uporabljamo cosinuse in sinuse, zato ker pač \o/
   // Glede na random Youtube komentar je pa treba vedt:
-  // Za rotacijo potrebujemo 2D prostor (na 1D črti mamo lahko samo premik in povečavo), se pravi površino (XY, XZ, YZ, ....),
+  // Za rotacijo potrebujemo 2D prostor (na 1D črti mamo lahko samo premik in povečavo), se pravi rabimo ravnino (XY, XZ, YZ, ....),
   // na kateri vrtimo točke tako da jih množimo s cos(x) po glavni diagonali matrike in sin(x), -sin(x) po emm "neglavni diagonali"(? ... zihr obstaja beseda za to)
   // Smer vrtenja določa kam damo sin(x) kam pa -sin(x), kar pride tud iz tega da je transpondenta rotacijske matrike njen inverz.
 
@@ -710,9 +701,9 @@ export class Aplikacija {
 
   //LAHKO bi si sicer NAČELOMA zamislil v 3D svetu tud,da se vrtimo okol neke osi (če bi hotel delat matematične zločine),
   //  ampak ta logika drži samo v 3 dimenzionalnem prostoru
-  //(v 2D naprimer se vrtimo kao okoli z-osi ki pa sploh ne obstaja, v 4D se vrtimo okoli dveh pravokotno na sebe osi, objasn mi to kako deluje pol???)
+  //(v 2D naprimer se vrtimo kao okoli z-osi ki pa sploh ne obstaja, v 4D se vrtimo okoli dveh pravokotno na sebe osi, kar si pa naši možgani ne znajo predstavljat)
 
-  // Uglavnem kle spodi so rotacijske matrike naš 3D prostor
+  // Uglavnem kle spodi so rotacijske matrike naš 4D prostor
 
   getRotacijskaMatrikaYZ() {
     let rotMatrikaYZ = [
@@ -875,25 +866,21 @@ export class Aplikacija {
 
   getTransformacijskaMatrika() {
     // Prvo Množenja
-    /* Preveri še kaj se dogaja če NAJPREJ premaknemo in potem skal, rot... -- Ne pozabi začet z enotsko matriko
-    this.transformacijskaMatrika = this.zmnoziMatrike(
-        this.getTranslacijskaMatrika(),
-        this.enotskaMatrika
-    );
-  */
+    // Načeloma najprej skaliramo.
     this.transformacijskaMatrika = this.zmnoziMatrike(
       this.getSkalarnaMatrika(),
       this.enotskaMatrika
     );
 
     // Drugo Množenje
-    // getRotacijskaMatrika() vs getRotacijskaMatrikaXYZLOL() - z rot. matrikami ni šale
+    // Je rotiranje.
     this.transformacijskaMatrika = this.zmnoziMatrike(
       this.getRotacijskaMatrika(),
       this.transformacijskaMatrika
     );
 
     /* Tretje Množenje*/
+    // Tranzlacija oz. premik je zadnje
     this.transformacijskaMatrika = this.zmnoziMatrike(
       this.getTranslacijskaMatrika(),
       this.transformacijskaMatrika
@@ -933,12 +920,14 @@ export class Aplikacija {
   narisiOglisca() {
     for (let i = 0; i < this.seznamOglisc.length; i++) {
       // prever clipping plane, če rabaš to sploh risat
+      // Ne risat če so preblizu
       if (
-        !(this.seznamOglisc[i].risaniVektor[2] < this.zNear) ||
-        !(this.seznamOglisc[i].risaniVektor[2] > this.zFar)
+        this.seznamOglisc[i].risaniVektor[2] + 2 < this.zNear ||
+        this.seznamOglisc[i].risaniVektor[3] + 2 < this.zFar
       ) {
-        this.seznamOglisc[i].narisiOglisce(this.canvasContext);
+        continue;
       }
+      this.seznamOglisc[i].narisiOglisce(this.canvasContext);
     }
   }
   narisiPovezave() {
@@ -955,6 +944,18 @@ export class Aplikacija {
             : this.seznamPovezav[i][j + 1];
         koncnoOglisceIndeks -= 1; // Oglisca v seznamu se začnejo z 1 zato odštejem kle
 
+        // Ne risat če so preblizu
+        if (
+          this.seznamOglisc[zacetnoOglisceIndeks].risaniVektor[2] + 2 <
+            this.zNear ||
+          this.seznamOglisc[zacetnoOglisceIndeks].risaniVektor[3] + 2 <
+            this.zFar ||
+          this.seznamOglisc[koncnoOglisceIndeks].risaniVektor[2] + 2 <
+            this.zNear ||
+          this.seznamOglisc[koncnoOglisceIndeks].risaniVektor[3] + 2 < this.zFar
+        ) {
+          continue;
+        }
         context.beginPath();
         context.moveTo(
           700 + this.seznamOglisc[zacetnoOglisceIndeks].risaniVektor[0] * 100,
@@ -973,6 +974,13 @@ export class Aplikacija {
 
   narisiKoordinate() {
     for (let i = 0; i < this.seznamOglisc.length; i++) {
+      // Ne risat če so preblizu
+      if (
+        this.seznamOglisc[i].risaniVektor[2] + 2 < this.zNear ||
+        this.seznamOglisc[i].risaniVektor[3] + 2 < this.zFar
+      ) {
+        continue;
+      }
       this.seznamOglisc[i].narisiKoordinateOglisc(this.canvasContext);
     }
   }
@@ -980,24 +988,51 @@ export class Aplikacija {
   narisiVektorje() {
     // To bo za orientacijo x,y,z koordinatnega sistema
     const context = this.canvasContext;
-    const zacetnoOglisce = this.seznamOglisc[1];
-    console.log(zacetnoOglisce);
+    const zacetnoOglisce = this.seznamOglisc[1]; // Nevem zakaj ni zacetno na indeksu 0; Po vsej logiki bi moral bit tko... ampak dela
+
+    // Ne risat če so preblizu
+    if (
+      zacetnoOglisce.risaniVektor[2] + 2 < this.zNear ||
+      zacetnoOglisce.risaniVektor[3] + 2 < this.zFar
+    ) {
+      return;
+    }
 
     // X-Vektor
     let koncnoOglisce = this.seznamOglisc[5];
-    this.narisiPuscico(context, zacetnoOglisce, koncnoOglisce, "red");
+    if (
+      !(koncnoOglisce.risaniVektor[2] + 2 < this.zNear ||
+      koncnoOglisce.risaniVektor[3] + 2 < this.zFar)
+    ) {
+      this.narisiPuscico(context, zacetnoOglisce, koncnoOglisce, "red");
+    }
 
     // Y-Vektor
     koncnoOglisce = this.seznamOglisc[0];
-    this.narisiPuscico(context, zacetnoOglisce, koncnoOglisce, "green");
+    if (
+      !(koncnoOglisce.risaniVektor[2] + 2 < this.zNear ||
+      koncnoOglisce.risaniVektor[3] + 2 < this.zFar)
+    ) {
+      this.narisiPuscico(context, zacetnoOglisce, koncnoOglisce, "green");
+    }
 
     // Z-Vektor
     koncnoOglisce = this.seznamOglisc[3];
-    this.narisiPuscico(context, zacetnoOglisce, koncnoOglisce, "blue");
+    if (
+      !(koncnoOglisce.risaniVektor[2] + 2 < this.zNear ||
+      koncnoOglisce.risaniVektor[3] + 2 < this.zFar)
+    ) {
+      this.narisiPuscico(context, zacetnoOglisce, koncnoOglisce, "blue");
+    }
 
     // W-Vektor
     koncnoOglisce = this.seznamOglisc[9];
-    this.narisiPuscico(context, zacetnoOglisce, koncnoOglisce, "purple");
+    if (
+      !(koncnoOglisce.risaniVektor[2] + 2 < this.zNear ||
+      koncnoOglisce.risaniVektor[3] + 2 < this.zFar)
+    ) {
+      this.narisiPuscico(context, zacetnoOglisce, koncnoOglisce, "purple");
+    }
   }
 
   narisiPuscico(context, zacetnoOglisce, koncnoOglisce, style) {
@@ -1038,31 +1073,29 @@ export class Aplikacija {
         oglisce.zacetneKoordinate,
       ]);
 
-      // Dodaj Perspektivo PLACDRŽAČ
+      // Dodaj globino po z-osi
       if (this.aliNarisemSPerspektivo) {
         vektor = this.zmnoziMatrike(this.perspektivnaMatrikaRGTI, vektor);
         if (vektor[0][4] !== 0) {
           vektor[0][0] /= vektor[0][4];
           vektor[0][1] /= vektor[0][4];
-          vektor[0][2] /= vektor[0][4];
         }
-        oglisce.r = vektor[0][4];
       }
+      // Dodaj globino po w-osi
       if (this.aliNarisemSPerspektivoW) {
         vektor = this.zmnoziMatrike(this.perspektivnaMatrikaRGTIW, vektor);
         if (vektor[0][4] !== 0) {
           vektor[0][0] /= vektor[0][4];
           vektor[0][1] /= vektor[0][4];
-          vektor[0][2] /= vektor[0][4];
         }
       }
-
+      oglisce.r = vektor[0][2] + vektor[0][3]
       oglisce.risaniVektor = vektor[0];
     }
   }
 
   /************************************** **********************************/
-  // Update Function?! -- To bomo klicali vsakih 33 milisekund (30fps oziroma herzou)
+  // Update Function -- To bomo klicali vsakih 33 milisekund (30fps oziroma herzou)
   /************************************** **********************************/
 
   update(app) {

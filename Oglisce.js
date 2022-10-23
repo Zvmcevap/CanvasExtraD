@@ -4,17 +4,23 @@ export class Oglisce {
     this.zacetneKoordinate = [...seznamKoordinat];
     this.oglisceColor =
       "rgb(" +
-      (240 * (((this.zacetneKoordinate[0] + 1) / 2) +
-        (this.zacetneKoordinate[3] + 1) / 2))/2 +
+      (240 *
+        ((this.zacetneKoordinate[0] + 1) / 2 +
+          (this.zacetneKoordinate[3] + 1) / 2)) /
+        2 +
       "," +
-      (240 * (((this.zacetneKoordinate[1] + 1) / 2) +
-        (this.zacetneKoordinate[3] + 1) / 2))/2 +
+      (240 *
+        ((this.zacetneKoordinate[1] + 1) / 2 +
+          (this.zacetneKoordinate[3] + 1) / 2)) /
+        2 +
       "," +
-      (240 * (((this.zacetneKoordinate[2] + 1) / 2) +
-        (this.zacetneKoordinate[3] + 1) / 2))/2 +
+      (240 *
+        ((this.zacetneKoordinate[2] + 1) / 2 +
+          (this.zacetneKoordinate[3] + 1) / 2)) /
+        2 +
       ")";
     if (this.zacetneKoordinate.length < 4) {
-      this.zacetneKoordinate.push(0);
+      this.zacetneKoordinate.push(0.5);
     }
     this.zacetneKoordinate.push(1);
     this.risaniVektor = [
@@ -34,7 +40,7 @@ export class Oglisce {
     ctx.arc(
       700 + this.risaniVektor[0] * 100,
       350 + this.risaniVektor[1] * 100,
-      5 / this.r,
+      20 / this.r,
       0,
       2 * Math.PI
     );
@@ -50,7 +56,9 @@ export class Oglisce {
         " y: " +
         this.risaniVektor[1].toFixed(3) +
         " z: " +
-        this.risaniVektor[2].toFixed(3),
+        this.risaniVektor[2].toFixed(3) +
+        " w: " +
+        this.risaniVektor[3].toFixed(3),
       680 + this.risaniVektor[0] * 100,
       340 + this.risaniVektor[1] * 100
     );
