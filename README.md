@@ -24,7 +24,7 @@ Each row starting with "f" lists the vertices that will be connected by an edge,
 ### The Matrix
 
 The vertices are mapped onto the screen using a 5x5 transformation matrix, which is constructed by multiplying the scalar, rotation and translation matreces in this specific order (read from left to right):
->R<sub>T</sub> * R<sub>R</sub> * R<sub>S</sub>
+>M<sub>T</sub> * M<sub>R</sub> * M<sub>S</sub>
 
 In code the first array index maps to the row number, while the second maps to the column.
 
