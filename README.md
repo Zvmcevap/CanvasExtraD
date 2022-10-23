@@ -78,4 +78,4 @@ Controls if the perspective for either z or w axis is applied, the z-daleko and 
 
 Toggle buttons that raises the value of the appropriate transformation type based both on the radio buttons settings and their repective colour. The value increase happens every 33 miliseconds.
 
-![alt text](https://github.com/Zvmcevap/CanvasExtraD/Controls.png "Pic of the controls I hope")
+![alt text](https://github.com/Zvmcevap/CanvasExtraD/blob/master/Controls.png "Pic of the controls I hope")
