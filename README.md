@@ -50,32 +50,36 @@ Optional last two steps, the transformation matrix can be multiplied by a perspe
 Basically both x and y get **multiplied** by distance of the projection surface , **devided** by the distance of the vertices from 0 point on the axis.
 
 ## Controls
-All buttons are colour coded based on the axis they effect:
+### Upload File button:
+Can be used to load a different object from a .txt file. You can in theory paste in any .obj information into the text file and it *should* load correctly.
+
+### Most buttons are colour coded based on the axis they effect:
 - **Red** - X-axis
 - **Green** - Y-axis
 - **Blue** - Z-axis
 - **Purple** - W-axis
 
-*Of course, for rotation they don't map quite as well, basically for the 3D rotation they map which axis they turn around for, the other three rotation we get in 4D space I have assigned them in-between colours based on the RGB specter. Hope it works :)*
+*Of course, for rotation they don't map quite as well, basically for the 3D rotations we know the most, they get map to whichever axis they turn around, the other three rotation we get in 4D space I have assigned in-between colours based on the RGB specter. Hope it works :)*
 
-#### The radio buttons decide what kind of transformation gets applied to the buttons:
+### The radio buttons decide what kind of transformation gets applied to the buttons:
 - **Premik** - Translation
 - **Rotacija** - Rotation (heh)
 - **Povečava** - Scaling
 
-#### Nariši Checkboxes decides what get's drawn to the Canvas:
+### Nariši Checkboxes decides what get's drawn to the Canvas:
 - **Oglišča** - draws vertices
 - **Povezave** - draws edges
 - **Koordinate** - draws the post-transformation coordinates
-- **VektorjiXYZW** - draws a vektor from the origin to each of the main axis
+- **VektorjiXYZW** - draws a vektor from the origin to a vertex at the far end of each of the main axis, to better show how perpendicular vectors get drawn from 4D to 2D.
 
-#### Perspectiva:
+### Perspektiva:
 
 Controls if the perspective for either z or w axis is applied, the z-daleko and w-daleko control how far the projection surface is from **"The Eye"**.
 
 
-#### ++ Buttons:
+#### ++Buttons:
 
 Toggle buttons that raises the value of the appropriate transformation type based both on the radio buttons settings and their repective colour. The value increase happens every 33 miliseconds.
+
 
 ![alt text](https://github.com/Zvmcevap/CanvasExtraD/blob/master/Controls.png "Pic of the controls I hope")
