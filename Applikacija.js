@@ -129,6 +129,13 @@ export class Aplikacija {
       document.app.aliNarisemKoordinateOglisc = this.checked;
     });
 
+    this.aliNarisemVektorje = true;
+    this.vektorCheckbox = document.getElementById("narisiVektorje");
+    this.vektorCheckbox.checked = true;
+    this.vektorCheckbox.addEventListener("change", function () {
+      document.app.aliNarisemVektorje = this.checked;
+    });
+
     // Perspektiva
     this.aliNarisemSPerspektivo = false;
     this.perspektivaCheckbox = document.getElementById("perspektiva");
@@ -914,11 +921,10 @@ export class Aplikacija {
       [1, 0, 0, 0, 0],
       [0, 1, 0, 0, 0],
       [0, 0, 1, 0, 0],
-      [0, 0, 0, 1, 1/this.zFar],
+      [0, 0, 0, 1, 1 / this.zFar],
       [0, 0, 0, 0, 0],
     ];
   }
-
 
   /************************************** **********************************/
   // Funkcije za risanje po platnu
@@ -959,6 +965,7 @@ export class Aplikacija {
           350 + this.seznamOglisc[koncnoOglisceIndeks].risaniVektor[1] * 100
         );
         context.lineWidth = 1;
+        context.strokeStyle = "black";
         context.stroke();
       }
     }
@@ -968,6 +975,58 @@ export class Aplikacija {
     for (let i = 0; i < this.seznamOglisc.length; i++) {
       this.seznamOglisc[i].narisiKoordinateOglisc(this.canvasContext);
     }
+  }
+
+  narisiVektorje() {
+    // To bo za orientacijo x,y,z koordinatnega sistema
+    const context = this.canvasContext;
+    const zacetnoOglisce = this.seznamOglisc[1];
+    console.log(zacetnoOglisce);
+
+    // X-Vektor
+    let koncnoOglisce = this.seznamOglisc[5];
+    this.narisiPuscico(context, zacetnoOglisce, koncnoOglisce, "red");
+
+    // Y-Vektor
+    koncnoOglisce = this.seznamOglisc[0];
+    this.narisiPuscico(context, zacetnoOglisce, koncnoOglisce, "green");
+
+    // Z-Vektor
+    koncnoOglisce = this.seznamOglisc[3];
+    this.narisiPuscico(context, zacetnoOglisce, koncnoOglisce, "blue");
+
+    // W-Vektor
+    koncnoOglisce = this.seznamOglisc[9];
+    this.narisiPuscico(context, zacetnoOglisce, koncnoOglisce, "purple");
+  }
+
+  narisiPuscico(context, zacetnoOglisce, koncnoOglisce, style) {
+    const fromx = 700 + zacetnoOglisce.risaniVektor[0] * 100;
+    const fromy = 350 + zacetnoOglisce.risaniVektor[1] * 100;
+
+    const tox = 700 + koncnoOglisce.risaniVektor[0] * 100;
+    const toy = 350 + koncnoOglisce.risaniVektor[1] * 100;
+
+    const headlen = 20; // dolžina glave v px
+    const dx = tox - fromx;
+    const dy = toy - fromy;
+    const angle = Math.atan2(dy, dx);
+
+    context.beginPath();
+    context.moveTo(fromx, fromy);
+    context.lineTo(tox, toy);
+    context.lineTo(
+      tox - headlen * Math.cos(angle - Math.PI / 6),
+      toy - headlen * Math.sin(angle - Math.PI / 6)
+    );
+    context.moveTo(tox, toy);
+    context.lineTo(
+      tox - headlen * Math.cos(angle + Math.PI / 6),
+      toy - headlen * Math.sin(angle + Math.PI / 6)
+    );
+    context.lineWidth = 5;
+    context.strokeStyle = style;
+    context.stroke();
   }
 
   // Posodobi Koordinate Oglišč samo ko se spremeni Tranformacijska Matrika ali Perspektiva
@@ -1038,6 +1097,10 @@ export class Aplikacija {
     }
     if (app.aliNarisemKoordinateOglisc) {
       app.narisiKoordinate();
+    }
+
+    if (app.aliNarisemVektorje) {
+      app.narisiVektorje();
     }
   }
 }

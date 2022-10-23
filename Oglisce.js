@@ -13,7 +13,6 @@ export class Oglisce {
       (240 * (((this.zacetneKoordinate[2] + 1) / 2) +
         (this.zacetneKoordinate[3] + 1) / 2))/2 +
       ")";
-console.log(this.oglisceColor)
     if (this.zacetneKoordinate.length < 4) {
       this.zacetneKoordinate.push(0);
     }
