@@ -12,7 +12,7 @@ Since then 4+ dimensional space has been causing me headaches and I felt like sh
 
 ## How?
 ### Tools at Hand
-Everything gets drawn onto the HTML Canvas using Javascript. The canvas itself is refreshed every 33 milisends, to roughly correlate with 30 frames per second of a standard console game.
+Everything gets drawn onto the HTML Canvas using Javascript. The canvas itself is refreshed every 33 milisends, to roughly correlate with 30 frames per second of a standard console game (going for that *cinematic* feel obviously).
 
 ### Getting Vertices and Edges
 Objects get imported from a text file (mimicking .obj format, in theory you can import your own models if you paste the .obj contents into a .txt file).
@@ -23,13 +23,13 @@ Each row starting with "f" lists the vertices that will be connected by an edge,
 
 ### The Matrix
 
-The vertices are mapped onto the screen using a 5x5 transformation matrix, which is constructed by multiplying the scalar, rotation and translation matreces in this specific order (read from left to right):
+The vertices are mapped onto the screen using a 5x5 transformation matrix, which is constructed by multiplying the scalar, rotation and translation matrices in this specific order (read from left to right):
 >M<sub>T</sub> * M<sub>R</sub> * M<sub>S</sub>
 
-In code the first array index maps to the row number, while the second maps to the column.
+In the code the first array index maps to the row number, while the second maps to the column.
 
 ### The Scalar Matrix
-The vertices are mapped onto the screen using a 5x5 transformation matrix, which is constructed by multiplying the Scalar Matrix with Sx, Sy, Sz, Sw, 1 on the main diagonal with the Identity Matrix first. One number S to scale each axis.
+The Scalar Matrix with Sx, Sy, Sz, Sw, 1 on the main diagonal (one number S for each axis scaling factor) gets multiplied with the Identity Matrix.
 
 ### Rotation Matrix
 Then it's multiplied by the Rotational Matrix constructed from multiplying the 6 different planes of rotation:
@@ -37,8 +37,10 @@ Then it's multiplied by the Rotational Matrix constructed from multiplying the 6
 
 Again, from left to right, as they do.
 
+It uses *"Euler Angles"* from what I can gather, meaning that with all the ways we can rotate, we can achieve the gimble lock on 3 rotation planes at once!
+
 ### Translation Matrix
-Sorry to English speakers, the translation matrix does in fact ***not*** translate my code from Slovenian into English.
+Apologies to the English speakers, the translation matrix does, in fact, ***not*** translate my code from Slovenian into English.
 
 But what it does do is use the fifth column to translate the position of the vertices where row 1,2,3 and for map to translation for x, y, z, and w respectively.
 
