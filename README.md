@@ -1,5 +1,7 @@
 # Four Dimensional Transformations
-Mostly of cubes. Check the video below for how it looks.
+Mostly of cubes. Click on the picture below to see it in action:
+
+
 [![Youtube Video](http://img.youtube.com/vi/F4igtIzGCwk/0.jpg)](http://www.youtube.com/watch?v=F4igtIzGCwk)
 
 ## But Why?
