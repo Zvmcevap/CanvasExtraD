@@ -1,11 +1,11 @@
 # Four Dimensional Transformations
 Mostly of cubes.
+[Added videos on the YouTube.](https://www.youtube.com/watch?v=F4igtIzGCwk)
 
 ## But Why?
 
-Trying to learn computer graphics, I've made a 3D "renderer" for homework and decided I can finally dabble with the fourth dimension.
+Trying to learn computer graphics, I've made a [3D "renderer" for homework](https://github.com/Zvmcevap/Canvas3d-RGTI-Homework) and decided I can finally dabble with the fourth dimension.
 
-https://github.com/Zvmcevap/Canvas3d-RGTI-Homework
 
 Obviously the main inspiration was watching [a movie](https://www.imdb.com/title/tt0285492/) at an impressionable age.
 Since then 4+ dimensional space has been causing me headaches and I felt like sharing that.

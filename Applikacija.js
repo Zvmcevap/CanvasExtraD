@@ -353,7 +353,7 @@ export class Aplikacija {
     this.fieldTranslateW.addEventListener("change", this.numberFieldOnChange);
 
     // Radio Batn
-    this.tranformationType = "scale";
+    this.tranformationType = "rotation";
     this.radioButtons = document.querySelectorAll(
       'input[name="transformation-type"]'
     );
