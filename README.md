@@ -1,6 +1,6 @@
 # Four Dimensional Transformations
-Mostly of cubes.
-[Added videos on the YouTube.](https://www.youtube.com/watch?v=F4igtIzGCwk)
+Mostly of cubes. Check the video below for how it looks.
+[![Youtube Video](http://img.youtube.com/vi/F4igtIzGCwk/0.jpg)](http://www.youtube.com/watch?v=F4igtIzGCwk)
 
 ## But Why?
 
