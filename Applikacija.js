@@ -111,9 +111,9 @@ export class Aplikacija {
       document.app.aliNarisemPovezave = this.checked;
     });
 
-    this.aliNarisemKoordinateOglisc = true;
+    this.aliNarisemKoordinateOglisc = false;
     this.koordinateCheckbox = document.getElementById("narisiKoordinate");
-    this.koordinateCheckbox.checked = true;
+    this.koordinateCheckbox.checked = false;
     this.koordinateCheckbox.addEventListener("change", function () {
       document.app.aliNarisemKoordinateOglisc = this.checked;
     });
@@ -126,9 +126,9 @@ export class Aplikacija {
     });
 
     // Perspektiva
-    this.aliNarisemSPerspektivo = false;
+    this.aliNarisemSPerspektivo = true;
     this.perspektivaCheckbox = document.getElementById("perspektiva");
-    this.perspektivaCheckbox.checked = false;
+    this.perspektivaCheckbox.checked = true;
     this.perspektivaCheckbox.addEventListener("change", function () {
       document.app.aliNarisemSPerspektivo = this.checked;
       document.app.getPerspektivnoMatrikoRGTI();
